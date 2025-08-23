@@ -1,6 +1,10 @@
 import { Button } from "@/components/ui/button";
+import { useState } from "react";
 
 export default function Hero() {
+  const [imageError, setImageError] = useState(false);
+  const [imageLoading, setImageLoading] = useState(true);
+
   const handleExploreClick = () => {
     const collectionsSection = document.getElementById('collections');
     if (collectionsSection) {
@@ -8,16 +12,34 @@ export default function Hero() {
     }
   };
 
+  const handleImageError = () => {
+    setImageError(true);
+    setImageLoading(false);
+  };
+
+  const handleImageLoad = () => {
+    setImageLoading(false);
+  };
+
   return (
     <section className="min-h-screen relative flex items-center justify-center overflow-hidden" data-testid="hero-section">
       {/* Hero Background */}
       <div className="absolute inset-0 z-0">
-        <img 
-          src="https://pixabay.com/get/g2cfccf6a0f5aa7f605536f3573b37044613dbfbdbd117d7bee78c04bd5eccb142dd3b11eaed3be46ad5b54058de68e9e5adfbd58b195a6323cedd4784d7ed45d_1280.jpg"
-          alt="Elegant fashion model in sophisticated pink attire"
-          className="w-full h-full object-cover"
-          data-testid="hero-image"
-        />
+        {imageLoading && (
+          <div className="w-full h-full bg-gradient-to-r from-clara-pink/40 to-clara-lavender/40 animate-pulse"></div>
+        )}
+        {imageError ? (
+          <div className="w-full h-full bg-gradient-to-r from-clara-pink/60 to-clara-lavender/60"></div>
+        ) : (
+          <img 
+            src="https://images.unsplash.com/photo-1469334031218-e382a71b716b?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1280&h=720"
+            alt="Elegant fashion model in sophisticated pink attire"
+            className={`w-full h-full object-cover ${imageLoading ? 'hidden' : 'block'}`}
+            data-testid="hero-image"
+            onError={handleImageError}
+            onLoad={handleImageLoad}
+          />
+        )}
         <div className="absolute inset-0 bg-gradient-to-r from-clara-pink/20 to-clara-lavender/20"></div>
       </div>
       

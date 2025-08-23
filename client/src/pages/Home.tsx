@@ -7,8 +7,14 @@ import Newsletter from "@/components/Newsletter";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Link } from "wouter";
+import { useState } from "react";
 
 export default function Home() {
+  const [homeImageError, setHomeImageError] = useState(false);
+  const [homeImageLoading, setHomeImageLoading] = useState(true);
+  const [collectionImageErrors, setCollectionImageErrors] = useState<{ [key: string]: boolean }>({});
+  const [collectionImageLoading, setCollectionImageLoading] = useState<{ [key: string]: boolean }>({});
+
   const { data: products, isLoading: productsLoading } = useQuery<Product[]>({
     queryKey: ["/api/products"],
   });
@@ -16,6 +22,24 @@ export default function Home() {
   const { data: collections, isLoading: collectionsLoading } = useQuery<Collection[]>({
     queryKey: ["/api/collections"],
   });
+
+  const handleHomeImageError = () => {
+    setHomeImageError(true);
+    setHomeImageLoading(false);
+  };
+
+  const handleHomeImageLoad = () => {
+    setHomeImageLoading(false);
+  };
+
+  const handleCollectionImageError = (collectionId: string) => {
+    setCollectionImageErrors(prev => ({ ...prev, [collectionId]: true }));
+    setCollectionImageLoading(prev => ({ ...prev, [collectionId]: false }));
+  };
+
+  const handleCollectionImageLoad = (collectionId: string) => {
+    setCollectionImageLoading(prev => ({ ...prev, [collectionId]: false }));
+  };
 
   return (
     <div className="bg-gray-50 text-gray-800 font-poppins">
@@ -53,12 +77,28 @@ export default function Home() {
               </Link>
             </div>
             <div className="relative">
-              <img 
-                src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&h=600"
-                alt="Fashion designer working in a bright, creative studio space"
-                className="rounded-2xl shadow-xl w-full"
-                data-testid="about-image"
-              />
+              {homeImageLoading && (
+                <div className="rounded-2xl shadow-xl w-full h-96 bg-gray-200 animate-pulse flex items-center justify-center">
+                  <div className="text-gray-400">Loading...</div>
+                </div>
+              )}
+              {homeImageError ? (
+                <div className="rounded-2xl shadow-xl w-full h-96 bg-gray-100 flex items-center justify-center">
+                  <div className="text-center text-gray-500">
+                    <div className="text-6xl mb-4">🖼️</div>
+                    <div>Image not available</div>
+                  </div>
+                </div>
+              ) : (
+                <img 
+                  src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&h=600"
+                  alt="Fashion designer working in a bright, creative studio space"
+                  className={`rounded-2xl shadow-xl w-full ${homeImageLoading ? 'hidden' : 'block'}`}
+                  data-testid="about-image"
+                  onError={handleHomeImageError}
+                  onLoad={handleHomeImageLoad}
+                />
+              )}
               <div className="absolute -bottom-6 -left-6 bg-clara-pink text-white p-6 rounded-xl shadow-lg max-w-xs" data-testid="about-quote">
                 <p className="font-playfair italic text-lg">"Fashion is art that you can wear"</p>
                 <p className="text-sm mt-2 opacity-90">- Clara, Founder</p>
@@ -95,13 +135,31 @@ export default function Home() {
               {collections?.map((collection) => (
                 <div key={collection.id} className="group cursor-pointer" data-testid={`collection-card-${collection.id}`}>
                   <div className="relative overflow-hidden rounded-2xl mb-6">
-                    <img 
-                      src={collection.imageUrl}
-                      alt={`${collection.name} collection`}
-                      className="w-full h-80 object-cover group-hover:scale-105 transition-transform duration-500"
-                      data-testid={`collection-image-${collection.id}`}
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    {collectionImageLoading[collection.id] !== false && (
+                      <div className="w-full h-80 bg-gray-200 animate-pulse rounded-2xl flex items-center justify-center">
+                        <div className="text-gray-400">Loading...</div>
+                      </div>
+                    )}
+                    {collectionImageErrors[collection.id] ? (
+                      <div className="w-full h-80 bg-gray-100 rounded-2xl flex items-center justify-center">
+                        <div className="text-center text-gray-500">
+                          <div className="text-4xl mb-2">🖼️</div>
+                          <div className="text-sm">Collection image not available</div>
+                        </div>
+                      </div>
+                    ) : (
+                      <>
+                        <img 
+                          src={collection.imageUrl}
+                          alt={`${collection.name} collection`}
+                          className={`w-full h-80 object-cover group-hover:scale-105 transition-transform duration-500 ${collectionImageLoading[collection.id] !== false ? 'hidden' : 'block'}`}
+                          data-testid={`collection-image-${collection.id}`}
+                          onError={() => handleCollectionImageError(collection.id)}
+                          onLoad={() => handleCollectionImageLoad(collection.id)}
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                      </>
+                    )}
                   </div>
                   <h3 className="font-playfair text-2xl font-semibold text-gray-800 mb-2" data-testid={`collection-name-${collection.id}`}>
                     {collection.name}

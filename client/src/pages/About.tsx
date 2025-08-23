@@ -1,8 +1,21 @@
 import Navbar from "@/components/Navbar";
 import Newsletter from "@/components/Newsletter";
 import Footer from "@/components/Footer";
+import { useState } from "react";
 
 export default function About() {
+  const [storyImageError, setStoryImageError] = useState(false);
+  const [storyImageLoading, setStoryImageLoading] = useState(true);
+
+  const handleStoryImageError = () => {
+    setStoryImageError(true);
+    setStoryImageLoading(false);
+  };
+
+  const handleStoryImageLoad = () => {
+    setStoryImageLoading(false);
+  };
+
   return (
     <div className="bg-gray-50 text-gray-800 font-poppins">
       <Navbar />
@@ -26,12 +39,28 @@ export default function About() {
         <div className="container mx-auto px-4">
           <div className="grid md:grid-cols-2 gap-16 items-center mb-20">
             <div>
-              <img 
-                src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&h=600"
-                alt="Fashion designer working in a bright, creative studio space"
-                className="rounded-2xl shadow-xl w-full"
-                data-testid="story-image"
-              />
+              {storyImageLoading && (
+                <div className="rounded-2xl shadow-xl w-full h-96 bg-gray-200 animate-pulse flex items-center justify-center">
+                  <div className="text-gray-400">Loading...</div>
+                </div>
+              )}
+              {storyImageError ? (
+                <div className="rounded-2xl shadow-xl w-full h-96 bg-gray-100 flex items-center justify-center">
+                  <div className="text-center text-gray-500">
+                    <div className="text-6xl mb-4">🖼️</div>
+                    <div>Image not available</div>
+                  </div>
+                </div>
+              ) : (
+                <img 
+                  src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&h=600"
+                  alt="Fashion designer working in a bright, creative studio space"
+                  className={`rounded-2xl shadow-xl w-full ${storyImageLoading ? 'hidden' : 'block'}`}
+                  data-testid="story-image"
+                  onError={handleStoryImageError}
+                  onLoad={handleStoryImageLoad}
+                />
+              )}
             </div>
             <div>
               <h2 className="font-playfair text-4xl font-bold text-gray-800 mb-6" data-testid="story-title">

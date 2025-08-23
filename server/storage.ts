@@ -59,14 +59,14 @@ export class MemStorage implements IStorage {
       {
         name: "Tailored Blazer",
         price: "$198",
-        imageUrl: "https://images.unsplash.com/photo-1551698618-1dfe5d97d256?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=400&h=600",
+        imageUrl: "https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=400&h=600",
         category: "blazers",
         description: "Professional tailored blazer in soft pink tone"
       },
       {
         name: "Statement Dress",
         price: "$156",
-        imageUrl: "https://pixabay.com/get/gaf19cf57a051dee59246201d497192ddce183605b454f7f221a947992b8fd99a68d7731e162015ede9d9ef67dc5257f087d1158175f5b7198b62101b23dce599_1280.jpg",
+        imageUrl: "https://images.unsplash.com/photo-1595777457583-95e059d581b8?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=400&h=600",
         category: "dresses",
         description: "Statement dress with floral patterns in pink tones"
       },
@@ -108,17 +108,17 @@ export class MemStorage implements IStorage {
       {
         name: "Spring Elegance",
         description: "Flowing dresses and delicate pieces perfect for the season of renewal.",
-        imageUrl: "https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=600&h=800"
+        imageUrl: "https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&h=800"
       },
       {
         name: "Professional Chic",
         description: "Sophisticated workwear that commands respect and exudes confidence.",
-        imageUrl: "https://pixabay.com/get/g1e485397d454f10d1cf99f9bd458521c2a4d41a1a3db8f39b403106840290d1dffee865def6bb55a70e1b902197f598a8da7f1f1323b048ab7ddc07cf45fbbb2_1280.jpg"
+        imageUrl: "https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&h=800"
       },
       {
         name: "Evening Glamour",
         description: "Statement pieces for special occasions and memorable moments.",
-        imageUrl: "https://images.unsplash.com/photo-1509631179647-0177331693ae?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=600&h=800"
+        imageUrl: "https://images.unsplash.com/photo-1509631179647-0177331693ae?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&h=800"
       }
     ];
 
