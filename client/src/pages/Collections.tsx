@@ -8,8 +8,6 @@ import { useState } from "react";
 
 export default function Collections() {
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
-  const [collectionImageErrors, setCollectionImageErrors] = useState<{ [key: string]: boolean }>({});
-  const [collectionImageLoading, setCollectionImageLoading] = useState<{ [key: string]: boolean }>({});
 
   const { data: products, isLoading: productsLoading } = useQuery<Product[]>({
     queryKey: ["/api/products"],
@@ -18,15 +16,6 @@ export default function Collections() {
   const { data: collections, isLoading: collectionsLoading } = useQuery<Collection[]>({
     queryKey: ["/api/collections"],
   });
-
-  const handleCollectionImageError = (collectionId: string) => {
-    setCollectionImageErrors(prev => ({ ...prev, [collectionId]: true }));
-    setCollectionImageLoading(prev => ({ ...prev, [collectionId]: false }));
-  };
-
-  const handleCollectionImageLoad = (collectionId: string) => {
-    setCollectionImageLoading(prev => ({ ...prev, [collectionId]: false }));
-  };
 
   const categories = [
     { id: "all", name: "All Products" },
@@ -87,34 +76,16 @@ export default function Collections() {
               {collections?.map((collection) => (
                 <div key={collection.id} className="group" data-testid={`featured-collection-${collection.id}`}>
                   <div className="relative overflow-hidden rounded-2xl mb-6">
-                    {collectionImageLoading[collection.id] !== false && (
-                      <div className="w-full h-80 bg-gray-200 animate-pulse rounded-2xl flex items-center justify-center">
-                        <div className="text-gray-400">Loading...</div>
-                      </div>
-                    )}
-                    {collectionImageErrors[collection.id] ? (
-                      <div className="w-full h-80 bg-gray-100 rounded-2xl flex items-center justify-center">
-                        <div className="text-center text-gray-500">
-                          <div className="text-4xl mb-2">🖼️</div>
-                          <div className="text-sm">Collection image not available</div>
-                        </div>
-                      </div>
-                    ) : (
-                      <>
-                        <img 
-                          src={collection.imageUrl}
-                          alt={`${collection.name} collection`}
-                          className={`w-full h-80 object-cover group-hover:scale-105 transition-transform duration-500 ${collectionImageLoading[collection.id] !== false ? 'hidden' : 'block'}`}
-                          onError={() => handleCollectionImageError(collection.id)}
-                          onLoad={() => handleCollectionImageLoad(collection.id)}
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                        <div className="absolute bottom-6 left-6 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                          <h3 className="font-playfair text-2xl font-bold mb-2">{collection.name}</h3>
-                          <p className="text-sm">{collection.description}</p>
-                        </div>
-                      </>
-                    )}
+                    <img 
+                      src={collection.imageUrl}
+                      alt={`${collection.name} collection`}
+                      className="w-full h-80 object-cover group-hover:scale-105 transition-transform duration-500"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    <div className="absolute bottom-6 left-6 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                      <h3 className="font-playfair text-2xl font-bold mb-2">{collection.name}</h3>
+                      <p className="text-sm">{collection.description}</p>
+                    </div>
                   </div>
                   <h3 className="font-playfair text-2xl font-semibold text-gray-800 mb-2">{collection.name}</h3>
                   <p className="text-gray-600">{collection.description}</p>

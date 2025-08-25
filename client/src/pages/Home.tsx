@@ -12,8 +12,6 @@ import { useState } from "react";
 export default function Home() {
   const [homeImageError, setHomeImageError] = useState(false);
   const [homeImageLoading, setHomeImageLoading] = useState(true);
-  const [collectionImageErrors, setCollectionImageErrors] = useState<{ [key: string]: boolean }>({});
-  const [collectionImageLoading, setCollectionImageLoading] = useState<{ [key: string]: boolean }>({});
 
   const { data: products, isLoading: productsLoading } = useQuery<Product[]>({
     queryKey: ["/api/products"],
@@ -30,15 +28,6 @@ export default function Home() {
 
   const handleHomeImageLoad = () => {
     setHomeImageLoading(false);
-  };
-
-  const handleCollectionImageError = (collectionId: string) => {
-    setCollectionImageErrors(prev => ({ ...prev, [collectionId]: true }));
-    setCollectionImageLoading(prev => ({ ...prev, [collectionId]: false }));
-  };
-
-  const handleCollectionImageLoad = (collectionId: string) => {
-    setCollectionImageLoading(prev => ({ ...prev, [collectionId]: false }));
   };
 
   return (
@@ -135,31 +124,13 @@ export default function Home() {
               {collections?.map((collection) => (
                 <div key={collection.id} className="group cursor-pointer" data-testid={`collection-card-${collection.id}`}>
                   <div className="relative overflow-hidden rounded-2xl mb-6">
-                    {collectionImageLoading[collection.id] !== false && (
-                      <div className="w-full h-80 bg-gray-200 animate-pulse rounded-2xl flex items-center justify-center">
-                        <div className="text-gray-400">Loading...</div>
-                      </div>
-                    )}
-                    {collectionImageErrors[collection.id] ? (
-                      <div className="w-full h-80 bg-gray-100 rounded-2xl flex items-center justify-center">
-                        <div className="text-center text-gray-500">
-                          <div className="text-4xl mb-2">🖼️</div>
-                          <div className="text-sm">Collection image not available</div>
-                        </div>
-                      </div>
-                    ) : (
-                      <>
-                        <img 
-                          src={collection.imageUrl}
-                          alt={`${collection.name} collection`}
-                          className={`w-full h-80 object-cover group-hover:scale-105 transition-transform duration-500 ${collectionImageLoading[collection.id] !== false ? 'hidden' : 'block'}`}
-                          data-testid={`collection-image-${collection.id}`}
-                          onError={() => handleCollectionImageError(collection.id)}
-                          onLoad={() => handleCollectionImageLoad(collection.id)}
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                      </>
-                    )}
+                    <img 
+                      src={collection.imageUrl}
+                      alt={`${collection.name} collection`}
+                      className="w-full h-80 object-cover group-hover:scale-105 transition-transform duration-500"
+                      data-testid={`collection-image-${collection.id}`}
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                   </div>
                   <h3 className="font-playfair text-2xl font-semibold text-gray-800 mb-2" data-testid={`collection-name-${collection.id}`}>
                     {collection.name}
